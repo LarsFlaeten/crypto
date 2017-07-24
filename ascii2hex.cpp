@@ -15,12 +15,22 @@ using namespace std;
 
 int main(int argc, char* argv[])
 {
-    if(argc < 2) {
-        cerr << "Usage: " << argv[0] << " m, where m is a string " <<  endl;
+    if(argc < 1 || (argc>=2 && strcmp(argv[1],"-h")==0)) {
+        cerr << "Usage: " << argv[0] << " [-h] [m], where m is a string." <<  endl;
+        cerr << "If no argument is given, string is read from stdin" << endl;
         return -1;
     }
 
-    std::string m(argv[1]);
+    std::string m;
+    if(argc >= 2)
+    {
+        m = argv[1];
+    }
+    else
+    {
+        getline(cin, m);
+    }
+
     if(m.length() < 1)
     {
         cerr << "m must have length > 0" << endl;

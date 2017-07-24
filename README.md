@@ -149,7 +149,7 @@ $ ./xor `echo "The quick brown fox jumps over the lazy dog" | ./ascii2hex` `cat 
 $ cat c.txt
 5d38af5ddb2b419a6677d603a6a883bd98a32d180f83fe1a683c646eb5273e545ca3528f3ff04593e1977a
 ```
-The ciphertext stored in `c.txt` can be recovered by XORing with the key again:
+The plaintext can be recovered by XORing the ciphertext with the key again:
 ```
 $./xor `cat key.txt` `cat c.txt` | ./hex2ascii
 The quick brown fox jumps over the lazy dog

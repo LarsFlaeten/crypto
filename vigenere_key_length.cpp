@@ -85,8 +85,8 @@ int main(int argc, char* argv[])
 
     }
 
-    cout << "The correct key lenght should have a value in the proximity of 0.065, while";
-    cout << "non-corrcet key lenghts wil have values closer to " << 1.0 / 256.0 << endl;
+    cout << "The correct key lenght should have a value in the proximity of 0.065, while ";
+    cout << "non-correct key lenghts wil have values closer to " << 1.0 / 256.0 << endl;
     cout << "(Last value applies for infinite length texts, shorter text may have higher values)" << endl;
     cout << "Anyway, the largest value above is a good hint of the key length used" << endl;
     return 0;

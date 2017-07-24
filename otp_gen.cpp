@@ -30,11 +30,11 @@ int main(int argc, char* argv[])
 
 
     // Open random device:
-    std::random_device rd2("/dev/random");    
+    std::random_device rd("/dev/urandom");    
     std::uniform_int_distribution<> dis(0,255);
     for(unsigned int i = 0; i < len; ++i)
     {
-        std::cout << hex << setw(2) << setfill('0') << dis(rd2);
+        std::cout << hex << setw(2) << setfill('0') << dis(rd);
     }
     std::cout << dec << endl;
 

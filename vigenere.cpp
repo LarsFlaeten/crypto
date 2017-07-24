@@ -42,7 +42,7 @@ int main(int argc, char* argv[])
     // get message from cmdline or stdin:
     std::string message;  
     if(argc < 4)
-        cin >> message;
+        getline(cin, message);
     else
         message = argv[3];
 

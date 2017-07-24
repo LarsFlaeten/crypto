@@ -10,12 +10,6 @@
 
 using namespace std;
 
-int mod(int a, int b)
-{
-    int r = a % b;
-    return r < 0 ? r + b : r;
-}
-
 // modification to standard Viginere, works on hex values instaed of a-z
 
 int main(int argc, char* argv[])
@@ -42,45 +36,16 @@ int main(int argc, char* argv[])
 
     }
 
-    // convert from an unsigned long int to a 4-byte array
-    //byteArray[0] = (int)((uv >> 24) & 0xFF) ;
-    //byteArray[1] = (int)((uv >> 16) & 0xFF) ;
-    //byteArray[2] = (int)((uv >> 8) & 0XFF);
-    //byteArray[3] = (int)((uv & 0XFF));
-
-
-   /* int size = 4;
-    if(byteArray[0]==0)
-    {
-        --size;
-        if(byteArray[1]==0)
-        {
-            --size;
-            if(byteArray[2]==0)
-                --size;
-        }
-    }
-    */
 
     int size = byteArray.size();
     int offset = 0;
-
-    //cout << "key size: " << size << ", offset " << offset << endl;
-
-    //for(int k = 0; k < size; ++k)
-    //    cout << hex << (int)byteArray[k + offset];
-    //cout << dec << endl;
 
     bool encrypt = true;
 
     if(strcmp(argv[2],"dec")==0)
     {
         encrypt = false;
-        //cout << "Decrypting" << endl;
-    } else
-    {
-        //cout << "Encrypting" << endl;
-    }
+    } 
 
 
     // get message from cmdline or stdin:
@@ -96,8 +61,6 @@ int main(int argc, char* argv[])
 
     std::vector<unsigned char> c;
     int keylen = key.size();
-    //cout << "Using key: " << key << endl;
-    //cout << "Message:   " << message << endl;
  
     if(encrypt)
     {
@@ -105,19 +68,8 @@ int main(int argc, char* argv[])
         
         for(int i = 0; i < message.size(); ++i)
         {
-            //cout << hex << (int)message[i];
-            // Carry the newline
             c.push_back(message[i] ^ byteArray[i%size + offset]);
         }
-        //cout << dec << endl;
-
-        //for(int i = 0; i < message.size(); ++i)
-        //{
-        //    cout << i%size + offset << " ";
-        //}
-        //cout << dec << endl;
-
-
 
     } else
     {
@@ -131,7 +83,6 @@ int main(int argc, char* argv[])
             uint32_t ui=0;
             ui=strtoul(cstr, &p, 16);
             c.push_back((unsigned char)ui);
-            //cout << hex << (int)c[c.size()-1] << dec << endl;
             i = i + 2;
         }
 
@@ -143,10 +94,6 @@ int main(int argc, char* argv[])
         }
     } 
 
-    //if(argc > 3 && (strcmp(argv[3],"--verbose") || strcmp(argv[3],"-v")))
-    //{
-    //   cout << "Cipher:    " << c << endl;
-    //} else
     if(encrypt)
     {
         for(int i = 0; i < c.size(); ++i)

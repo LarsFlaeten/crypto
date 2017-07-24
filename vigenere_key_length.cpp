@@ -10,13 +10,8 @@
 
 using namespace std;
 
-int mod(int a, int b)
-{
-    int r = a % b;
-    return r < 0 ? r + b : r;
-}
 
-// modification to standard Viginere, works on hex values instaed of a-z
+// Tries to find the key lenght used on a vigenere hex ciphertext
 
 int main(int argc, char* argv[])
 {
@@ -36,7 +31,7 @@ int main(int argc, char* argv[])
     // get message from cmdline or stdin:
     std::string message;  
     if(argc < 4)
-        cin >> message;
+        getline(cin, message);
     else
         message = argv[3];
 

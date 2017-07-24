@@ -136,3 +136,22 @@ $ ./xor `cat ciphertext | cut -c11-12` `./ascii2hex o`
 cd
 ```
 Voila, the 6th byte is 0xCD, and we have recovered the complete key used to generated the ciphertext as 0xBA1F91B253CD3E.
+
+## One-Time Pad
+The one time pad can be implemented by using the `otp_gen` to generate a random key for given length. The message to be encrypted should be passed through `./ascii2hex` and the XORed with the key using `./xor`, like this:
+```
+$ echo "The quick brown fox jumps over the lazy dog" | ./ascii2hex
+54686520717569636b2062726f776e20666f78206a756d7073206f76657220746865206c617a7920646f67
+$ ./otp_gen 43 > key.txt
+$ cat key.txt 
+0950ca7daa5e28f90d57b471c9dfed9dfecc553865f6936a1b1c0b18d0551e2034c672e35e8a3cb385f81d
+$ ./xor `echo "The quick brown fox jumps over the lazy dog" | ./ascii2hex` `cat key.txt`> c.txt
+$ cat c.txt
+5d38af5ddb2b419a6677d603a6a883bd98a32d180f83fe1a683c646eb5273e545ca3528f3ff04593e1977a
+```
+The ciphertext stored in `c.txt` can be recovered by XORing with the key again:
+```
+$./xor `cat key.txt` `cat c.txt` | ./hex2ascii
+The quick brown fox jumps over the lazy dog
+
+```

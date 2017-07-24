@@ -23,7 +23,14 @@ $ echo "helloworld" | ./shift_cipher 0
 helloworld    //key=0 preserves the original "plaintext"
 ```
 ## Vigenere Cipher
-The [Vigenere Cipher](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher) is implemented in its most basic form with `vigenere` (with key and message space {a-z}), and as a more generic HEX-variant in `vigenere_hex`. Some examples below:
+The [Vigenere Cipher](https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher) is implemented in its most basic form with `vigenere` (with key and message space {a-z}), and as a more generic HEX-variant in `vigenere_hex`. The Vigenère cipher consists of several Caesar ciphers in sequence with different shift values. The different shift values are taken successively from the "key". Example (from wikipedia):
+Plaintext:  ATTACKATDAWN
+Key:    LEMONLEMONLE
+Ciphertext: LXFOPVEFRNHR
+
+
+
+Some examples below:
 
 Basic Vigenere:
 ```

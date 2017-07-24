@@ -61,6 +61,78 @@ I see you!
 Allthough considered for a long time to be very secure, the Vigenere Cipher can quite easily be broken. The method below relies on the key being considerably shorter than the plaintext.
 
 A ciphertext is given in `ciphertext.txt`, which is encrypted with a random key with unkown lenght:
-`$ cat ciphertext.txt
-F96DE8C227A259C87EE1DA2AED57C93FE5DA36ED4EC87EF2C63AAE5B9A7EFFD673BE4ACF7BE8923CAB1ECE7AF2DA3DA44FCF7AE29235A24C963FF0DF3CA3599A70E5DA36BF1ECE77F8DC34BE129A6CF4D126BF5B9A7CFEDF3EB850D37CF0C63AA2509A76FF9227A55B9A6FE3D720A850D97AB1DD35ED5FCE6BF0D138A84CC931B1F121B44ECE70F6C032BD56C33FF9D320ED5CDF7AFF9226BE5BDE3FF7DD21ED56CF71F5C036A94D963FF8D473A351CE3FE5DA3CB84DDB71F5C17FED51DC3FE8D732BF4D963FF3C727ED4AC87EF5DB27A451D47EFD9230BF47CA6BFEC12ABE4ADF72E29224A84CDF3FF5D720A459D47AF59232A35A9A7AE7D33FB85FCE7AF5923AA31EDB3FF7D33ABF52C33FF0D673A551D93FFCD33DA35BC831B1F43CBF1EDF67F0DF23A15B963FE5DA36ED68D378F4DC36BF5B9A7AFFD121B44ECE76FEDC73BE5DD27AFCD773BA5FC93FE5DA3CB859D26BB1C63CED5CDF3FE2D730B84CDF3FF7DD21ED5ADF7CF0D636BE1EDB79E5D721ED57CE3FE6D320ED57D469F4DC27A85A963FF3C727ED49DF3FFFDD24ED55D470E69E73AC50DE3FE5DA3ABE1EDF67F4C030A44DDF3FF5D73EA250C96BE3D327A84D963FE5DA32B91ED36BB1D132A31ED87AB1D021A255DF71B1C436BF479A7AF0C13AA14794
-`
+```
+$ cat ciphertext.txt
+F96DE8 ... [abbreviated] ... 4794
+```
+### Getting the key lenght
+By taking into consideration that for a key lenght of N, the every Nth character will be shifted (XORed) with the same value. We can therefore examine frequencies of reccurring letters with varying N. When using N not the same as the key used, different characters will occur (almost) uniformly, while when using N equals the key length, we will see frequencies resembling that of normal letter frequencies in english text. If we sum the square of the frequencies, we tend to get a number equal to 0.065 when N is the same as the key lenght, while the sum is more equal to 1/256 when N is not equal to the key lenght used. The program `vigenere_key_length` uses this technique to try to establish the key lenght, here with a try in key lenghts form 1 to 10 bytes:
+```
+$ cat ciphertext.txt | vigenere_key_length 1 10
+Message size: 940
+Key length: 1, Sum q_i squared: 0.0135355
+Key length: 2, Sum q_i squared: 0.0138524
+Key length: 3, Sum q_i squared: 0.0191083
+Key length: 4, Sum q_i squared: 0.0173801
+Key length: 5, Sum q_i squared: 0.0244455
+Key length: 6, Sum q_i squared: 0.0197084
+Key length: 7, Sum q_i squared: 0.0860727
+Key length: 8, Sum q_i squared: 0.0249928
+Key length: 9, Sum q_i squared: 0.0295479
+Key length: 10, Sum q_i squared: 0.0312359
+The correct key lenght should have a value in the proximity of 0.065, whilenon-corrcet key lenghts wil have values closer to 0.00390625
+(Last value applies for infinite length texts, shorter text may have higher values)
+Anyway, the largest value above is a good hint of the key length used
+```
+From above, we see that the sum of q_i^2 is much higher for N=7, hence the key was probably 7 bytes long.
+
+### Getting the individual bytes of the key
+There are several techniques on how to do this, but knowing the key length, we can utilize frequency analysis (assuming we know the text is english) to try to guess the key. Letter frequencies for english text is used, as can be seen in `vigenere_break`, a program which tries to guess the key based on the key length from previous section.
+
+```
+$ cat ciphertext.txt | ./vigenere_break 7
+Message size: 940
+Key size to try: 7
+*** Offset 0
+Candidate key: a2 min: 52 max: 126, Sqipi: 0.022742 ............
+.....[output truncated].....
+Best Candidate for offset 6 was key 3e, with QiPi=0.0704661
+Proposed key: 
+0xba56c2b2539e3e
+```
+We can now try to decrypty the message with the proposed key:
+```
+$ cat ciphertext.txt | ./vigenere_hex ba56c2b2539e3e dec
+C;*pt<gr(#hysisi'hespr(0ti0e (=d  tu-* o5 t,0hn:qu, [output truncated]
+```
+OK, so we are not there yet. One way of completing this is to look at the output of `viginere_break`, and for the different offsets try different key values that sums close to 0.065. Howevere antother approach can be used.
+
+Looking at the text (and rememebering we have a recurring shift pattern of 7 characters due to the key length), it seems from the result that we are correct on at least the 1st, 4th, 5th and 7th characters. We can also start to guess some of the letters in the plaintext. I.e. if we guess that character 2 and 3 should be 'r' and 'y' in the plaintext (since it resembles somthing with "crypto"). We can get the key bytes for those positions by XORing(since m XOR c = k):
+```
+$ cat ciphertext.txt | cut -c3-4
+6D
+$ ./ascii2hex r
+72
+$ ./xor 6d 72
+1f // We now know the second byte of the key should be 1f (This was also a good candicate for this offset in viginere_break
+```
+Similary with the third character which we believe is 'y'
+```
+$ cat ciphertext.txt | cut -c5-6
+E8
+$ ./ascii2hex y
+79
+$ ./xor
+91
+```
+We can now try with our "improved" key, `0xba1f91b2539e3e`:
+```
+$ cat ciphertext | ./vigenere_hex ba1f91b2539e3e dec
+Crypt<graphysis thespracti0e and  tudy o5 techn:ques f<r, amo=g othe! thing .....
+```
+OK, almost there. Key bits for the sixt offset can now easily be retrieved by e.g. looking at chaacter position 6 which we think is an 'o':
+```
+$ ./xor `cat ciphertext | cut -c11-12` `./ascii2hex o`
+cd
+```
+Voila, the 6th byte is 0xCD, and we have recovered the complete key used to generated the ciphertext as 0xBA1F91B253CD3E.

@@ -12,7 +12,7 @@ def usage():
 
 def decrypt(ctext):
     num_blocks = len(ctext)/L
-    print "[*] Num blocks: %d" % num_blocks
+    print "*** Num blocks: %d" % num_blocks
     mn = []
     mn = decrypt_last(ctext, num_blocks)
     m1 = decrypt_remaining_blocks(ctext, num_blocks)
@@ -21,13 +21,13 @@ def decrypt(ctext):
     a = ['']
     for i in range(0,len(message)):
         a += chr(message[i])
-    print "Encrypted message was:"
+    print "*** Encrypted message was:"
     print "\"",
     print ''.join(a),
     print "\""
 
 def decrypt_last(ctext, num_blocks):
-    print "[*] Decrypting last block (no %d)" % num_blocks
+    print "*** Decrypting last block (no %d)" % num_blocks
     # Start from next last block (IV for last block):
     blocks = [ctext[i*16:(i+1)*16] for i in range(0, num_blocks)]
     IV = blocks[num_blocks-2]
@@ -44,7 +44,7 @@ def decrypt_last(ctext, num_blocks):
         IV[i] -= 1;
         if not ret:
             pad = L-i
-            print "[+] Padding is %d" % pad
+            print "*** Padding is %d" % pad
             break
 
     # We now know IV has pad number of paddings from the end
@@ -117,7 +117,7 @@ def decrypt_remaining_blocks(ctext, num_blocks):
     # I.e same method as the last block
     message = []
     for i in range(num_blocks-2,0,-1):
-        print "[*] Decoding block %d with IV in block %d" % (i+1, i)
+        print "*** Decoding block %d with IV in block %d" % (i+1, i)
         for l in range(0,L):
             print "X",
         print

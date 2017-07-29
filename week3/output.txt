@@ -1,0 +1,31 @@
+$ python decrypt.py challenge-ciphertext.txt 
+Connected to server successfully.
+*** Num blocks: 3
+*** Decrypting last block (no 3)
+*** Padding is 11
+X X X X )
+X X X = )
+X X   = )
+X .   = )
+A .   = )
+*** Decoding block 2 with IV in block 1
+X X X X X X X X X X X X X X X X
+X X X X X X X X X X X X X X X  
+X X X X X X X X X X X X X X n  
+X X X X X X X X X X X X X a n  
+X X X X X X X X X X X X   a n  
+X X X X X X X X X X X t   a n  
+X X X X X X X X X X e t   a n  
+X X X X X X X X X g e t   a n  
+X X X X X X X X   g e t   a n  
+X X X X X X X u   g e t   a n  
+X X X X X X o u   g e t   a n  
+X X X X X Y o u   g e t   a n  
+X X X X   Y o u   g e t   a n  
+X X X !   Y o u   g e t   a n  
+X X y !   Y o u   g e t   a n  
+X a y !   Y o u   g e t   a n  
+Y a y !   Y o u   g e t   a n  
+*** Encrypted message was:
+" Yay! You get an A. =) "
+Connection closed successfully.

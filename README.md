@@ -1,7 +1,7 @@
 # Crypto
 
 ## Introduction
-This repo contains various tools and apps from a cryptography course I have taken. Some further description and examples are given below.
+This repo contains various tools and apps from a cryptography course I have taken (Cryptography by University of Maryland on Coursera). Some further description and examples are given below.
 
 ## Building
 All apps/tools should be built easily with CMake (in-tree build allowed)
